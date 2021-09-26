@@ -48,6 +48,13 @@ const App = () => {
 
         setShowModal(false);
         setModalData(initialData);
+    };
+
+    const onChangeText = (title, index, value) => {
+        setColumns(columns.map(column => column.title === title ? {
+            ...column,
+            data: column.data.map((card, i) => i === index ? {...card, data: value} : card)
+        } : column ));
     }
 
     return (
@@ -59,7 +66,10 @@ const App = () => {
                     renderItem={({section, item, index}) => (
                         <View key={index}>
                             <Text>{item.title}</Text>
-                            <Text style={styles.content}>{item.data}</Text>
+                            <TextInput
+                                onChangeText={(value) => onChangeText(section.title, index, value)}
+                                value={item.data}
+                            />
                             {index === section.data.length - 1 && (
                                 <Pressable onPress={() => setShowModal(true)}>
                                     <Text style={styles.button}>+</Text>
